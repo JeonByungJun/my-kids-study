@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head><title>PWA Icon Generator</title></head>
+<body>
+<p>아이콘을 생성하려면 각 버튼을 클릭하고 다운로드된 파일을 <code>public/</code> 폴더에 넣으세요.</p>
+<button onclick="generate(192)">pwa-192.png 다운로드</button>
+<button onclick="generate(512)">pwa-512.png 다운로드</button>
+<button onclick="generate(180)">apple-touch-icon.png 다운로드</button>
+<canvas id="c" style="display:none"></canvas>
+<script>
+function generate(size) {
+  const c = document.getElementById('c');
+  c.width = size; c.height = size;
+  const ctx = c.getContext('2d');
+  // 배경 그라데이션
+  const g = ctx.createLinearGradient(0, 0, size, size);
+  g.addColorStop(0, '#ffecd2');
+  g.addColorStop(0.5, '#fcb69f');
+  g.addColorStop(1, '#a1c4fd');
+  // 둥근 사각형
+  const r = size * 0.18;
+  ctx.beginPath();
+  ctx.roundRect(0, 0, size, size, r);
+  ctx.fillStyle = g;
+  ctx.fill();
+  // 이모지
+  ctx.font = `${size * 0.5}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('📚', size/2, size/2);
+  // 다운로드
+  const a = document.createElement('a');
+  const name = size === 180 ? 'apple-touch-icon.png' : `pwa-${size}.png`;
+  a.download = name;
+  a.href = c.toDataURL('image/png');
+  a.click();
+}
+</script>
+</body>
+</html>

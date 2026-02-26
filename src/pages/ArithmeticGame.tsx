@@ -218,31 +218,6 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
           <ProblemDisplay problem={problem} op={op} />
         </div>
 
-        {/* 결과 오버레이 */}
-        {result.show && (
-          <div className="result-overlay">
-            <div className={`result-card ${result.correct ? 'result-correct' : 'result-wrong'}`}>
-              <div className="result-emoji">
-                {result.correct
-                  ? ['🎉', '⭐', '🌟', '🏆', '🎊'][Math.floor(Math.random() * 5)]
-                  : ['😅', '🤔', '💪', '😊'][Math.floor(Math.random() * 4)]}
-              </div>
-              <div className="result-text">
-                {result.correct ? '정답이에요!' : '다시 해봐요!'}
-              </div>
-              <div className="result-sub">
-                {result.correct
-                  ? `${problem.a} ${op} ${problem.b} = ${problem.answer}`
-                  : `${input}은(는) 아니에요!`}
-              </div>
-            </div>
-            {result.correct && (
-              <button className="result-next-btn" onClick={nextProblem}>
-                다음 문제 ▶
-              </button>
-            )}
-          </div>
-        )}
       </div>
 
       {/* 정답 표시 */}
@@ -276,6 +251,32 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
           <button className="numpad-side btn-clear" onClick={() => setInput('')}>CE</button>
         </div>
       </div>
+
+      {/* 결과 오버레이 (최상위) */}
+      {result.show && (
+        <div className="result-overlay">
+          <div className={`result-card ${result.correct ? 'result-correct' : 'result-wrong'}`}>
+            <div className="result-emoji">
+              {result.correct
+                ? ['🎉', '⭐', '🌟', '🏆', '🎊'][Math.floor(Math.random() * 5)]
+                : ['😅', '🤔', '💪', '😊'][Math.floor(Math.random() * 4)]}
+            </div>
+            <div className="result-text">
+              {result.correct ? '정답이에요!' : '다시 해봐요!'}
+            </div>
+            <div className="result-sub">
+              {result.correct
+                ? `${problem.a} ${op} ${problem.b} = ${problem.answer}`
+                : `${input}은(는) 아니에요!`}
+            </div>
+          </div>
+          {result.correct && (
+            <button className="result-next-btn" onClick={nextProblem}>
+              다음 문제 ▶
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
