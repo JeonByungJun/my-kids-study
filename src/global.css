@@ -1,0 +1,307 @@
+/* ── 리셋 ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  min-height: 100dvh;
+  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 30%, #a1c4fd 70%, #c2e9fb 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%; min-height: 100dvh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+
+/* ── 배경 별 ── */
+.stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.star {
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,0.6);
+  animation: float linear infinite;
+}
+@keyframes float {
+  0%   { transform: translateY(110vh) scale(0.5); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+}
+
+/* ── 페이지 래퍼 ── */
+.page {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 32px;
+  padding: 32px 24px; width: 100%; max-width: 520px;
+}
+
+/* ── 타이틀 ── */
+.site-title {
+  font-size: clamp(2rem, 8vw, 3rem); font-weight: 900;
+  color: #fff; text-shadow: 0 4px 12px rgba(0,0,0,.18);
+  letter-spacing: 2px; text-align: center;
+}
+.site-title span {
+  display: block; font-size: .45em; font-weight: 700;
+  opacity: .9; margin-top: 4px;
+}
+.section-title {
+  font-size: clamp(1.4rem, 6vw, 2rem); font-weight: 800;
+  color: #fff; text-shadow: 0 3px 8px rgba(0,0,0,.15);
+  text-align: center;
+}
+
+/* ── 뒤로 버튼 ── */
+.back-btn {
+  align-self: flex-start;
+  background: rgba(255,255,255,.35); border: none; border-radius: 50px;
+  padding: 10px 22px; font-size: 1rem; font-weight: 700; color: #555;
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+  transition: background .2s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+}
+.back-btn:active { transform: scale(.95); background: rgba(255,255,255,.5); }
+
+/* ── 메뉴 그리드 ── */
+.menu-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 20px; width: 100%;
+}
+
+/* ── 메뉴 카드 ── */
+.menu-card {
+  background: #fff; border-radius: 28px; padding: 28px 16px 24px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  cursor: pointer; border: none; position: relative;
+  box-shadow: 0 8px 0 rgba(0,0,0,.10), 0 12px 24px rgba(0,0,0,.10);
+  transition: transform .12s, box-shadow .12s;
+  -webkit-tap-highlight-color: transparent; user-select: none;
+  text-decoration: none;
+}
+.menu-card:active {
+  transform: translateY(6px);
+  box-shadow: 0 2px 0 rgba(0,0,0,.10), 0 4px 8px rgba(0,0,0,.10);
+}
+.menu-card .icon { font-size: clamp(2.8rem, 10vw, 4rem); line-height: 1; }
+.menu-card .label {
+  font-size: clamp(1.1rem, 4.5vw, 1.4rem);
+  font-weight: 800; color: #444; letter-spacing: 1px;
+}
+
+/* 카드 테마 */
+.card-math    { background: linear-gradient(160deg, #fff5f5, #ffe0e0); } .card-math .label    { color: #e55; }
+.card-science { background: linear-gradient(160deg, #f0fff4, #d4f5e2); } .card-science .label { color: #2a9d5c; }
+.card-english { background: linear-gradient(160deg, #eff6ff, #d6eaff); } .card-english .label { color: #3a7de8; }
+.card-art     { background: linear-gradient(160deg, #fdf4ff, #ead9ff); } .card-art .label     { color: #9b5de5; }
+.card-calc    { background: linear-gradient(160deg, #fffbeb, #fde68a); } .card-calc .label    { color: #c07800; }
+.card-addition    { background: linear-gradient(160deg, #fff5f5, #fecaca); } .card-addition .label    { color: #e53e3e; }
+.card-subtraction { background: linear-gradient(160deg, #eff6ff, #bfdbfe); } .card-subtraction .label { color: #2563eb; }
+
+/* 준비 중 */
+.menu-card.coming-soon { opacity: .6; cursor: default; pointer-events: none; }
+.menu-card.coming-soon::after {
+  content: '준비 중'; position: absolute; top: 10px; right: 10px;
+  background: #f59e0b; color: #fff; font-size: .65rem; font-weight: 700;
+  padding: 3px 8px; border-radius: 20px;
+}
+
+/* ════════════════════════════════════════
+   덧셈 게임 레이아웃
+════════════════════════════════════════ */
+.game-page {
+  max-width: 100%; padding: 0; gap: 0;
+  height: 100dvh; width: 100%;
+  display: flex; flex-direction: column;
+  z-index: 1; position: relative;
+}
+
+.game-header {
+  width: 100%; padding: 12px 16px; flex-shrink: 0;
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,.3); backdrop-filter: blur(8px);
+  z-index: 10;
+}
+.game-header .back-btn { margin: 0; }
+.game-header .title { flex: 1; text-align: center; font-size: 1.1rem; font-weight: 800; color: #444; }
+.game-header .score { font-size: .9rem; font-weight: 700; color: #666; min-width: 40px; text-align: right; }
+
+/* 캔버스 */
+.canvas-container {
+  position: relative; flex: 1; width: 100%;
+  overflow: hidden; background: #f9f7f0;
+}
+
+.game-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  touch-action: none; cursor: crosshair;
+}
+
+/* 문제 카드 */
+.problem-overlay {
+  position: absolute; top: 16px; left: 16px;
+  background: rgba(255,255,255,.88);
+  border-radius: 20px; padding: 18px 24px;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  z-index: 5;
+}
+.problem-vertical {
+  font-family: 'Courier New', monospace;
+  font-size: clamp(2rem, 9vw, 3.2rem); font-weight: 900;
+  line-height: 1.5; color: #2d3748;
+}
+.problem-vertical .op-row {
+  color: #e53e3e; display: flex; align-items: center; gap: 6px;
+}
+.problem-vertical .op-row .num { flex: 1; text-align: right; }
+.problem-vertical .div-line { border-bottom: 3px solid #2d3748; margin: 4px 0 2px; }
+.problem-horizontal {
+  font-size: clamp(1.8rem, 8vw, 3rem); font-weight: 900; color: #2d3748;
+}
+.problem-horizontal .q-mark { color: #f59e0b; }
+
+/* ── 하단 입력 영역 (정답 + 숫자패드) ── */
+.input-area {
+  width: 100%; flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center;
+  background: linear-gradient(135deg, #ffecd2, #fcd1d1 30%, #d4e4ff 70%, #c2e9fb);
+  padding: 0;
+}
+
+/* 정답 표시 영역 (전체 너비 배경으로 하단 가림) */
+.answer-display {
+  width: 100%; flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center;
+  background: #f9f7f0;
+  padding: 8px 0;
+}
+.answer-display .ans-inner {
+  background: #fff;
+  border: 3px solid #f59e0b; border-radius: 20px;
+  padding: 10px 28px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,.10);
+}
+.answer-display .ans-label {
+  display: block; font-size: .75rem; font-weight: 700;
+  color: #b45309; margin-bottom: 2px;
+}
+.answer-display .ans-value {
+  font-size: 2.2rem; font-weight: 900; color: #2d3748;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 4px;
+  min-width: 1.2em;
+  display: inline-block;
+}
+
+/* 숫자패드 래퍼 */
+.numpad-area {
+  width: 100%; max-width: 360px;
+  display: flex; align-items: stretch; gap: 6px;
+  padding: 12px 8px;
+}
+.numpad {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.numpad-btn {
+  padding: 14px 0; border-radius: 14px; border: none;
+  font-size: 1.4rem; font-weight: 800;
+  background: #fff; color: #2d3748;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform .08s, box-shadow .08s;
+  box-shadow: 0 3px 0 rgba(0,0,0,.12);
+  user-select: none;
+}
+.numpad-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 rgba(0,0,0,.12);
+}
+.numpad-btn.btn-submit {
+  background: #c6f6d5; color: #276749;
+}
+.numpad-btn.btn-back {
+  background: #fed7d7; color: #c53030;
+}
+.numpad-side {
+  width: 44px; border-radius: 14px; border: none;
+  font-size: 1.1rem; font-weight: 700;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform .08s;
+  user-select: none;
+}
+.numpad-side:active { transform: scale(.92); }
+.numpad-side.btn-clear {
+  background: rgba(254,215,215,.7); color: #c53030;
+}
+
+/* 결과 오버레이 */
+.result-overlay {
+  position: absolute; inset: 0; z-index: 30;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px;
+  background: rgba(0,0,0,.45); backdrop-filter: blur(4px);
+}
+.result-card {
+  background: #fff; border-radius: 32px;
+  padding: 36px 48px; text-align: center;
+  box-shadow: 0 24px 48px rgba(0,0,0,.2);
+  animation: pop .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.result-emoji { font-size: 4rem; }
+.result-text  { font-size: 2rem; font-weight: 900; margin-top: 10px; }
+.result-sub   { font-size: 1rem; color: #666; margin-top: 6px; }
+.result-correct .result-text { color: #276749; }
+.result-wrong   .result-text { color: #c53030; }
+.result-next-btn {
+  background: #f6e05e; color: #744210;
+  border: none; border-radius: 50px; padding: 16px 44px;
+  font-size: 1.4rem; font-weight: 900; cursor: pointer;
+  box-shadow: 0 6px 0 rgba(0,0,0,.15);
+  -webkit-tap-highlight-color: transparent;
+  animation: pop .35s .15s cubic-bezier(.34,1.56,.64,1) both;
+}
+.result-next-btn:active { transform: translateY(5px); box-shadow: 0 1px 0 rgba(0,0,0,.15); }
+
+/* 컨페티 */
+@keyframes cf-fall {
+  0%   { transform: translateY(0) rotate(0); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* 토스트 */
+.toast {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+  background: rgba(30,30,30,.82); color: #fff;
+  padding: 10px 22px; border-radius: 24px; font-size: .9rem; font-weight: 600;
+  z-index: 100; white-space: nowrap; pointer-events: none;
+  transition: opacity .25s; opacity: 0;
+}
+.toast.show { opacity: 1; }
+
+/* ════════════════════════════════════════
+   반응형: 모바일 (기본) / 태블릿 (≥ 768px)
+════════════════════════════════════════ */
+
+/* 작은 모바일 */
+@media (max-width: 360px) {
+  .menu-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .menu-card { padding: 20px 10px 18px; }
+  .numpad-btn { padding: 10px 0; font-size: 1.2rem; }
+  .numpad-side { width: 36px; font-size: 1rem; }
+}
+
+/* ── 태블릿 (≥ 768px) ── 세로 레이아웃 유지, 꽉 찬 화면 */
+@media (min-width: 768px) {
+  .game-page {
+    width: 100%;
+  }
+}
