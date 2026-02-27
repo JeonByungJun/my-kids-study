@@ -3,7 +3,9 @@ import Stars from './components/Stars';
 import HomePage from './pages/HomePage';
 import MathPage from './pages/MathPage';
 import CalcPage from './pages/CalcPage';
+import Semester21Page from './pages/Semester21Page';
 import ArithmeticGame from './pages/ArithmeticGame';
+import ThreeDigitGame from './pages/games/ThreeDigitGame';
 
 export default function App() {
   return (
@@ -13,6 +15,8 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/math" element={<MathPage />} />
         <Route path="/math/calc" element={<CalcPage />} />
+        <Route path="/math/semester21" element={<Semester21Page />} />
+        <Route path="/math/semester21/unit1" element={<ThreeDigitGame />} />
         <Route path="/math/addition" element={<ArithmeticGame mode="addition" />} />
         <Route path="/math/subtraction" element={<ArithmeticGame mode="subtraction" />} />
       </Routes>

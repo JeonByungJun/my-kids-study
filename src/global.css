@@ -100,6 +100,13 @@ body {
 .card-calc    { background: linear-gradient(160deg, #fffbeb, #fde68a); } .card-calc .label    { color: #c07800; }
 .card-addition    { background: linear-gradient(160deg, #fff5f5, #fecaca); } .card-addition .label    { color: #e53e3e; }
 .card-subtraction { background: linear-gradient(160deg, #eff6ff, #bfdbfe); } .card-subtraction .label { color: #2563eb; }
+.card-semester { background: linear-gradient(160deg, #ecfdf5, #a7f3d0); } .card-semester .label { color: #065f46; }
+.card-unit1 { background: linear-gradient(160deg, #fef3c7, #fde68a); } .card-unit1 .label { color: #92400e; }
+.card-unit2 { background: linear-gradient(160deg, #d1fae5, #a7f3d0); } .card-unit2 .label { color: #065f46; }
+.card-unit3 { background: linear-gradient(160deg, #fee2e2, #fecaca); } .card-unit3 .label { color: #991b1b; }
+.card-unit4 { background: linear-gradient(160deg, #dbeafe, #bfdbfe); } .card-unit4 .label { color: #1e40af; }
+.card-unit5 { background: linear-gradient(160deg, #ede9fe, #ddd6fe); } .card-unit5 .label { color: #5b21b6; }
+.card-unit6 { background: linear-gradient(160deg, #fce7f3, #fbcfe8); } .card-unit6 .label { color: #9d174d; }
 
 /* 준비 중 */
 .menu-card.coming-soon { opacity: .6; cursor: default; pointer-events: none; }
@@ -270,6 +277,13 @@ body {
   animation: pop .35s .15s cubic-bezier(.34,1.56,.64,1) both;
 }
 .result-next-btn:active { transform: translateY(5px); box-shadow: 0 1px 0 rgba(0,0,0,.15); }
+
+/* 퀴즈 텍스트 (단원별 게임) */
+.quiz-text {
+  font-size: clamp(1.2rem, 5vw, 1.6rem);
+  font-weight: 700; color: #2d3748; line-height: 1.8;
+}
+.quiz-text strong { color: #e53e3e; }
 
 /* 컨페티 */
 @keyframes cf-fall {
