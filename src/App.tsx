@@ -7,6 +7,8 @@ import Semester21Page from './pages/Semester21Page';
 import ArithmeticGame from './pages/ArithmeticGame';
 import ThreeDigitGame from './pages/games/ThreeDigitGame';
 import ShapeGame from './pages/games/ShapeGame';
+import GamesPage from './pages/GamesPage';
+import HexaGame from './pages/games/HexaGame';
 
 export default function App() {
   return (
@@ -14,6 +16,8 @@ export default function App() {
       <Stars />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/games" element={<GamesPage />} />
+        <Route path="/games/hexa" element={<HexaGame />} />
         <Route path="/math" element={<MathPage />} />
         <Route path="/math/calc" element={<CalcPage />} />
         <Route path="/math/semester21" element={<Semester21Page />} />

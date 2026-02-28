@@ -7,6 +7,7 @@
 | 🔬 | 과학 | — | 준비 중 |
 | 🔤 | 영어 | — | 준비 중 |
 | 🎨 | 미술 | — | 준비 중 |
+| 🎮 | 게임 | `/games` | 활성 |
 
 ## 수학 (`/math`)
 | 아이콘 | 메뉴 | 경로 | 상태 |
@@ -32,6 +33,14 @@
 | 📊 | 5단원: 분류하기 | `/math/semester21/unit5` | 준비 중 |
 | ✖️ | 6단원: 곱셈 | `/math/semester21/unit6` | 준비 중 |
 
+## 게임 (`/games`)
+| 아이콘 | 메뉴 | 경로 | 상태 |
+|--------|------|------|------|
+| 💎 | HEXA | `/games/hexa` | 활성 |
+| 🃏 | 카드 짝맞추기 | `/games/memory` | 준비 중 |
+| 🎯 | 두더지잡기 | `/games/whack` | 준비 중 |
+| 🧩 | 퍼즐 | `/games/puzzle` | 준비 중 |
+
 ---
 
 ## 파일 매핑
@@ -45,3 +54,5 @@
 | `/math/semester21` | `Semester21Page.tsx` | 2-1학기 단원 선택 |
 | `/math/semester21/unit1` | `games/ThreeDigitGame.tsx` | 1단원: 세자리수 |
 | `/math/semester21/unit2` | `games/ShapeGame.tsx` | 2단원: 여러가지도형 |
+| `/games` | `GamesPage.tsx` | 게임 선택 |
+| `/games/hexa` | `games/HexaGame.tsx` | HEXA 퍼즐 게임 |

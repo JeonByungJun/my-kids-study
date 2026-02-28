@@ -12,6 +12,7 @@ export default function HomePage() {
         <MenuCard icon="🔬" label="과학" theme="science" comingSoon />
         <MenuCard icon="📖" label="영어" theme="english" comingSoon />
         <MenuCard icon="🎨" label="미술" theme="art" comingSoon />
+        <MenuCard icon="🎮" label="게임" theme="game" to="/games" />
       </div>
     </div>
   );
