@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 export interface Problem {
   display: ReactNode;
   answer: number;
+  /** 선택지 모드: 제공 시 숫자패드 대신 선택 버튼 표시. answer = 정답의 0-based 인덱스 */
+  choices?: string[];
 }
 
 interface GameShellProps {
@@ -142,6 +144,27 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
     }
   }, [input, problem, clearCanvas]);
 
+  /* 선택지 클릭 */
+  const onChoice = useCallback(
+    (idx: number) => {
+      const correct = idx === problem.answer;
+      setInput(problem.choices?.[idx] ?? '');
+      if (correct) {
+        setScore((s) => s + 1);
+        setResult({ show: true, correct: true });
+        launchConfetti(containerRef.current);
+      } else {
+        setResult({ show: true, correct: false });
+        setTimeout(() => {
+          setResult({ show: false, correct: false });
+          setInput('');
+          clearCanvas();
+        }, 1500);
+      }
+    },
+    [problem, clearCanvas],
+  );
+
   const nextProblem = useCallback(() => {
     setProblem(generate());
     setInput('');
@@ -171,38 +194,53 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
         <div className="problem-overlay">{problem.display}</div>
       </div>
 
-      <div className="answer-display">
-        <div className="ans-inner">
-          <span className="ans-label">정답</span>
-          <span className="ans-value">{input || '?'}</span>
-        </div>
-      </div>
-
-      <div className="input-area">
-        <div className="numpad-area">
-          <button className="numpad-side btn-clear" onClick={clearCanvas}>
-            🗑️
-          </button>
-          <div className="numpad">
-            {['1', '2', '3', '4', '5', '6', '7', '8', '9', '←', '0', '✓'].map((key) => (
-              <button
-                key={key}
-                className={`numpad-btn ${key === '✓' ? 'btn-submit' : ''} ${key === '←' ? 'btn-back' : ''}`}
-                onClick={() => {
-                  if (key === '←') onBackspace();
-                  else if (key === '✓') checkAnswer();
-                  else onDigit(key);
-                }}
-              >
-                {key}
+      {/* 선택지 모드 vs 숫자패드 모드 */}
+      {problem.choices ? (
+        <div className="input-area">
+          <div className="choice-area">
+            {problem.choices.map((text, i) => (
+              <button key={i} className="choice-btn" onClick={() => onChoice(i)}>
+                {text}
               </button>
             ))}
           </div>
-          <button className="numpad-side btn-clear" onClick={() => setInput('')}>
-            CE
-          </button>
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="answer-display">
+            <div className="ans-inner">
+              <span className="ans-label">정답</span>
+              <span className="ans-value">{input || '?'}</span>
+            </div>
+          </div>
+
+          <div className="input-area">
+            <div className="numpad-area">
+              <button className="numpad-side btn-clear" onClick={clearCanvas}>
+                🗑️
+              </button>
+              <div className="numpad">
+                {['1', '2', '3', '4', '5', '6', '7', '8', '9', '←', '0', '✓'].map((key) => (
+                  <button
+                    key={key}
+                    className={`numpad-btn ${key === '✓' ? 'btn-submit' : ''} ${key === '←' ? 'btn-back' : ''}`}
+                    onClick={() => {
+                      if (key === '←') onBackspace();
+                      else if (key === '✓') checkAnswer();
+                      else onDigit(key);
+                    }}
+                  >
+                    {key}
+                  </button>
+                ))}
+              </div>
+              <button className="numpad-side btn-clear" onClick={() => setInput('')}>
+                CE
+              </button>
+            </div>
+          </div>
+        </>
+      )}
 
       {result.show && (
         <div className="result-overlay">
@@ -214,7 +252,11 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
             </div>
             <div className="result-text">{result.correct ? '정답이에요!' : '다시 해봐요!'}</div>
             <div className="result-sub">
-              {result.correct ? `정답: ${problem.answer}` : `${input}은(는) 아니에요!`}
+              {result.correct
+                ? `정답: ${problem.choices ? problem.choices[problem.answer] : problem.answer}`
+                : problem.choices
+                  ? `${input}은(는) 아니에요!`
+                  : `${input}은(는) 아니에요!`}
             </div>
           </div>
           {result.correct && (

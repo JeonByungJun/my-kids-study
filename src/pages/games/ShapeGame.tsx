@@ -299,6 +299,86 @@ const generators: (() => Problem)[] = [
       answer: target.sides,
     };
   },
+
+  /* ──── 선택지(한글) 문제 ──── */
+
+  /* 🔤① 도형을 보고 이름 맞추기 */
+  () => {
+    const target = pick(SHAPES);
+    const c = pick(COLORS);
+    const names = SHAPES.map((s) => s.name);
+    const others = shuffle(names.filter((n) => n !== target.name)).slice(0, 3);
+    const choices = shuffle([target.name, ...others]);
+    return {
+      display: (
+        <div className="quiz-text" style={{ textAlign: 'center' }}>
+          <ShapeSVG type={target.name} size={90} color={c} />
+          <br />이 도형의 <strong>이름</strong>은?
+        </div>
+      ),
+      answer: choices.indexOf(target.name),
+      choices,
+    };
+  },
+
+  /* 🔤② 설명을 보고 도형 이름 맞추기 */
+  () => {
+    const target = pick(POLY);
+    const others = shuffle(POLY.filter((s) => s.name !== target.name).map((s) => s.name)).slice(0, 3);
+    const choices = shuffle([target.name, ...others]);
+    return {
+      display: (
+        <div className="quiz-text">
+          변이 <strong>{target.sides}개</strong>이고
+          <br />
+          꼭짓점이 <strong>{target.vertices}개</strong>인
+          <br />
+          도형은?
+        </div>
+      ),
+      answer: choices.indexOf(target.name),
+      choices,
+    };
+  },
+
+  /* 🔤③ 조건 추리 → 도형 이름 */
+  () => {
+    const target = pick(POLY.filter((s) => s.sides >= 4 && s.sides <= 5));
+    const lower = target.sides - 1;
+    const upper = target.vertices + 1;
+    const others = shuffle(SHAPES.filter((s) => s.name !== target.name).map((s) => s.name)).slice(0, 3);
+    const choices = shuffle([target.name, ...others]);
+    return {
+      display: (
+        <div className="quiz-text">
+          변이 {lower}개보다 많고
+          <br />
+          꼭짓점이 {upper}개보다 적은
+          <br />
+          도형은 <strong>무엇</strong>?
+        </div>
+      ),
+      answer: choices.indexOf(target.name),
+      choices,
+    };
+  },
+
+  /* 🔤④ 꼭짓점/변이 없는 도형 */
+  () => {
+    const others = shuffle(POLY.map((s) => s.name)).slice(0, 3);
+    const choices = shuffle(['원', ...others]);
+    return {
+      display: (
+        <div className="quiz-text">
+          변과 꼭짓점이
+          <br />
+          <strong>없는</strong> 도형은?
+        </div>
+      ),
+      answer: choices.indexOf('원'),
+      choices,
+    };
+  },
 ];
 
 function generate(): Problem {

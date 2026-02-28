@@ -278,6 +278,26 @@ body {
 }
 .result-next-btn:active { transform: translateY(5px); box-shadow: 0 1px 0 rgba(0,0,0,.15); }
 
+/* 선택지 버튼 영역 */
+.choice-area {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; padding: 14px 16px;
+  width: 100%; max-width: 400px; margin: 0 auto;
+}
+.choice-btn {
+  padding: 16px 10px; border-radius: 18px; border: none;
+  font-size: clamp(1rem, 4vw, 1.3rem); font-weight: 800;
+  background: #fff; color: #2d3748;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform .08s, box-shadow .08s;
+  box-shadow: 0 4px 0 rgba(0,0,0,.12);
+  user-select: none;
+}
+.choice-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 rgba(0,0,0,.12);
+}
+
 /* 퀴즈 텍스트 (단원별 게임) */
 .quiz-text {
   font-size: clamp(1.2rem, 5vw, 1.6rem);
