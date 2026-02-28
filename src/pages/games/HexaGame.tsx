@@ -20,8 +20,8 @@ const GEM_TYPES: GemType[] = [
   { name: 'aqua', shape: 'droplet', main: '#00e5ff', light: '#84ffff', dark: '#006064' },
 ];
 
-const COLS = 6;
-const ROWS = 10;
+const COLS = 7;
+const ROWS = 13;
 const GEM_COUNT = GEM_TYPES.length;
 const BASE_SCORE = 10;
 const GEMS_PER_LEVEL = 20;
@@ -346,7 +346,7 @@ function GemSVG({ gemId, className }: { gemId: number; className?: string }) {
 /*             HEXA GAME                 */
 /* ══════════════════════════════════════ */
 const REF_W = 375;
-const REF_H = 667;
+const REF_H = 720;
 
 export default function HexaGame() {
   const navigate = useNavigate();

@@ -338,9 +338,9 @@ body {
   z-index: 1; position: relative;
 }
 
-/* 고정 크기 게임 컨테이너 */
+/* 고정 크기 게임 컨테이너 (7×13 보드 기준) */
 .hexa-page {
-  width: 375px; height: 667px;
+  width: 375px; height: 720px;
   display: flex; flex-direction: column;
   background: #0a0a1a;
   transform-origin: center center;
@@ -350,7 +350,7 @@ body {
 /* 헤더 */
 .hexa-header {
   display: flex; align-items: center;
-  padding: 6px 8px; gap: 6px;
+  padding: 4px 8px; gap: 6px;
   background: rgba(255,255,255,0.04);
   flex-shrink: 0;
 }
@@ -422,10 +422,10 @@ body {
 .hexa-board {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(10, 1fr);
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(13, 1fr);
   gap: 2px;
-  aspect-ratio: 6 / 10;
+  aspect-ratio: 7 / 13;
   background: rgba(255,255,255,0.02);
   border: 2px solid rgba(255,255,255,0.1);
   border-radius: 8px; padding: 3px;
