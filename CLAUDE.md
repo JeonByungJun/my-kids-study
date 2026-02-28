@@ -18,48 +18,44 @@ ChildApp/
 ├── package.json
 ├── vite.config.ts
 ├── vercel.json              # SPA 라우팅 rewrite
+├── CLAUDE.md                # 이 파일 (프로젝트 설명)
+├── docs/
+│   ├── menu.md              # 메뉴 구조 + 라우팅 + 파일 매핑
+│   └── hexa-game.md         # HEXA 게임 설계서
 ├── public/
 │   └── favicon.svg
-├── scripts/
-│   └── generate-icons.html  # PWA 아이콘 생성 도구
 ├── src/
 │   ├── main.tsx             # 진입점 (BrowserRouter)
 │   ├── App.tsx              # 라우트 정의
 │   ├── global.css           # 전역 스타일
 │   ├── components/
 │   │   ├── Stars.tsx        # 배경 별 애니메이션
-│   │   └── MenuCard.tsx     # 재사용 메뉴 카드
+│   │   ├── MenuCard.tsx     # 재사용 메뉴 카드
+│   │   └── GameShell.tsx    # 퀴즈형 게임 프레임워크
 │   └── pages/
-│       ├── HomePage.tsx     # 과목 선택
-│       ├── MathPage.tsx     # 수학 하위 메뉴 (연산·도형·통계)
-│       ├── CalcPage.tsx     # 연산 하위 메뉴 (덧셈·뺄셈)
-│       └── ArithmeticGame.tsx  # 덧셈/뺄셈 공통 게임
+│       ├── HomePage.tsx     # 과목 선택 (수학/과학/영어/미술/게임)
+│       ├── MathPage.tsx     # 수학 하위 메뉴
+│       ├── CalcPage.tsx     # 연산 하위 메뉴
+│       ├── Semester21Page.tsx # 2-1학기 단원 선택
+│       ├── ArithmeticGame.tsx # 덧셈/뺄셈 공통 게임
+│       ├── GamesPage.tsx    # 게임 선택 메뉴
+│       └── games/
+│           ├── HexaGame.tsx     # HEXA 퍼즐 게임
+│           ├── ThreeDigitGame.tsx # 1단원: 세자리수
+│           └── ShapeGame.tsx    # 2단원: 여러가지도형
 ```
 
-## 라우팅
-```
-/                  → HomePage (과목 선택)
-/math              → MathPage (연산·도형·통계)
-/math/calc         → CalcPage (덧셈·뺄셈 선택)
-/math/addition     → ArithmeticGame (받아올림 덧셈)
-/math/subtraction  → ArithmeticGame (받아내림 뺄셈)
-```
-
-## 연산 게임 구조 (ArithmeticGame)
-- **mode prop**: `'addition'` | `'subtraction'`으로 동작 전환
-- **문제 생성**: 덧셈은 받아올림 보장, 뺄셈은 받아내림 보장
-- **캔버스**: 자유 풀이 영역 (손글씨 계산 과정)
-- **숫자패드**: 0~9 + 지우기(←) + 확인(✓), 양쪽에 🗑️(캔버스 지우기) / CE(입력 초기화)
-- **정답 표시**: 숫자패드 배경 바로 위에 가변 크기 카드
-- **결과**: fixed 최상위 모달, 정답 시 컨페티 + 다음 문제, 오답 시 1.5초 후 자동 닫힘 + 캔버스·입력 초기화
+## 문서
+- `docs/menu.md` — 전체 메뉴 구조, 라우팅, 파일 매핑 (메뉴 추가/변경 시 참조)
+- `docs/hexa-game.md` — HEXA 게임 설계서 (Phase, 함수, 점수, 할 일 등)
 
 ## 디자인 시스템
 - 배경: 파스텔 그라데이션 + 떠다니는 별
 - 카드: border-radius 28px, 아랫면 그림자(입체감)
 - 폰트: 굵고 크게 (clamp 사용)
 - 터치 피드백: `:active` translateY + 그림자 축소
-- 뒤로 버튼: 메뉴 페이지에서 fixed 좌측 상단, 게임 헤더에서는 헤더 내부
 - 반응형: 모바일 기본, 태블릿(≥768px) 꽉 찬 화면
+- 게임: 375px 기준 고정 크기 + scale 스케일링
 
 ## 개발 명령어
 ```bash
@@ -68,7 +64,8 @@ npm run build   # 프로덕션 빌드
 ```
 
 ## 앞으로 할 일
-- [ ] 곱셈/나눗셈 추가
+- [ ] HEXA: 하드드롭, 효과음, 최고점수 저장
+- [ ] 곱셈/나눗셈 게임 추가
+- [ ] 게임: 카드 짝맞추기, 두더지잡기, 퍼즐
 - [ ] 오답 시 힌트 기능
-- [ ] 다른 과목 콘텐츠
-- [ ] PWA 아이콘 PNG 생성 (scripts/generate-icons.html)
+- [ ] 다른 과목 콘텐츠 (과학/영어/미술)
