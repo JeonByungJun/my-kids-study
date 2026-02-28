@@ -26,7 +26,7 @@
 | 아이콘 | 단원 | 경로 | 상태 |
 |--------|------|------|------|
 | 💯 | 1단원: 세자리수 | `/math/semester21/unit1` | 활성 |
-| 📐 | 2단원: 여러가지도형 | `/math/semester21/unit2` | 준비 중 |
+| 📐 | 2단원: 여러가지도형 | `/math/semester21/unit2` | 활성 |
 | ➕ | 3단원: 덧셈과뺄셈 | `/math/semester21/unit3` | 준비 중 |
 | 📏 | 4단원: 길이재기 | `/math/semester21/unit4` | 준비 중 |
 | 📊 | 5단원: 분류하기 | `/math/semester21/unit5` | 준비 중 |
@@ -44,3 +44,4 @@
 | `/math/subtraction` | `ArithmeticGame.tsx` | 받아내림 뺄셈 게임 |
 | `/math/semester21` | `Semester21Page.tsx` | 2-1학기 단원 선택 |
 | `/math/semester21/unit1` | `games/ThreeDigitGame.tsx` | 1단원: 세자리수 |
+| `/math/semester21/unit2` | `games/ShapeGame.tsx` | 2단원: 여러가지도형 |

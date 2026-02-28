@@ -10,7 +10,7 @@ export default function Semester21Page() {
       <h2 className="section-title">📖 2-1학기 수학</h2>
       <div className="menu-grid">
         <MenuCard icon="💯" label="세자리수" theme="unit1" to="/math/semester21/unit1" />
-        <MenuCard icon="📐" label="여러가지도형" theme="unit2" comingSoon />
+        <MenuCard icon="📐" label="여러가지도형" theme="unit2" to="/math/semester21/unit2" />
         <MenuCard icon="➕" label="덧셈과뺄셈" theme="unit3" comingSoon />
         <MenuCard icon="📏" label="길이재기" theme="unit4" comingSoon />
         <MenuCard icon="📊" label="분류하기" theme="unit5" comingSoon />
