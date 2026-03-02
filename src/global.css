@@ -177,6 +177,32 @@ body {
 }
 .problem-horizontal .q-mark { color: #f59e0b; }
 
+/* ── 풀이 빈칸 채우기 ── */
+.step-display {
+  text-align: left; line-height: 2;
+  font-size: clamp(1.1rem, 4.5vw, 1.5rem); font-weight: 800; color: #2d3748;
+  display: inline-block;
+}
+.step-first { font-size: 1.15em; }
+.step-filled {
+  color: #276749; background: #c6f6d5;
+  padding: 1px 7px; border-radius: 7px;
+}
+.step-blank {
+  color: #a0aec0; background: #edf2f7;
+  padding: 1px 8px; border-radius: 7px;
+  display: inline-block; min-width: 1.8em; text-align: center;
+}
+.step-blank.active {
+  color: #975a16; background: #fefcbf;
+  border: 2px solid #ecc94b;
+  animation: step-pulse 1s ease-in-out infinite;
+}
+@keyframes step-pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
 /* ── 하단 입력 영역 (정답 + 숫자패드) ── */
 .input-area {
   width: 100%; flex-shrink: 0;
@@ -299,6 +325,46 @@ body {
   user-select: none;
 }
 .choice-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 rgba(0,0,0,.12);
+}
+
+/* 다중선택 버튼 영역 */
+.multi-choice-area {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; padding: 10px 16px;
+  width: 100%; max-width: 400px; margin: 0 auto;
+}
+.multi-choice-btn {
+  padding: 14px 10px; border-radius: 18px;
+  border: 3px solid transparent;
+  font-size: clamp(0.9rem, 3.5vw, 1.1rem); font-weight: 700;
+  background: #fff; color: #2d3748;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform .08s, box-shadow .08s, border-color .15s, background .15s;
+  box-shadow: 0 3px 0 rgba(0,0,0,.10);
+  user-select: none;
+}
+.multi-choice-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 rgba(0,0,0,.10);
+}
+.multi-choice-btn.selected {
+  border-color: #f59e0b;
+  background: #fef3c7; color: #92400e;
+  box-shadow: 0 3px 0 rgba(245,158,11,.3);
+}
+.multi-submit-btn {
+  display: block; margin: 4px auto 10px;
+  padding: 12px 48px; border-radius: 50px; border: none;
+  font-size: 1.1rem; font-weight: 800;
+  background: #c6f6d5; color: #276749;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 4px 0 rgba(0,0,0,.12);
+  transition: transform .08s;
+  user-select: none;
+}
+.multi-submit-btn:active {
   transform: translateY(4px);
   box-shadow: 0 0 0 rgba(0,0,0,.12);
 }
@@ -496,6 +562,18 @@ body {
 /* ════════════════════════════════════════
    반응형: 모바일 (기본) / 태블릿 (≥ 768px)
 ════════════════════════════════════════ */
+
+/* ── 가로 모드 차단 (터치 기기) ── */
+@media (orientation: landscape) and (pointer: coarse) {
+  body::after {
+    content: '📱 세로로 돌려주세요';
+    position: fixed; inset: 0; z-index: 99999;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, #ffecd2, #fcb69f 30%, #a1c4fd 70%, #c2e9fb);
+    font-size: clamp(1.2rem, 4vw, 2rem); font-weight: 900; color: #2d3748;
+    text-align: center; padding: 20px;
+  }
+}
 
 /* 작은 모바일 (≤360px) */
 @media (max-width: 360px) {

@@ -9,6 +9,88 @@ interface Problem {
   b: number;
   answer: number;
   vertical: boolean;
+  /* 풀이 빈칸 채우기 */
+  steps?: number[];
+  stepLines?: string[];
+}
+
+/* ── 풀이 빈칸 패턴 생성 ── */
+type StepPattern = { steps: number[]; stepLines: string[] };
+
+function makeStepAddition(a: number, b: number): StepPattern | null {
+  const ans = a + b;
+  const pool: StepPattern[] = [];
+  // a를 올림 (a%10 >= 7 → diff 1~3)
+  if (a % 10 >= 7) {
+    const k = 10 - (a % 10), r = a + k, m = r + b;
+    pool.push(
+      { stepLines: [`${a} + ${b}`, `= ${r} + {0} − ${k}`, `= {1} − ${k}`, `= {2}`], steps: [b, m, ans] },
+      { stepLines: [`${a} + ${b}`, `= {0} + ${b} − ${k}`, `= {1} − ${k}`, `= {2}`], steps: [r, m, ans] },
+      { stepLines: [`${a} + ${b}`, `= ${r} + ${b} − {0}`, `= {1} − ${k}`, `= {2}`], steps: [k, m, ans] },
+    );
+  }
+  // a를 내림 (a%10 in 1~3 → diff 1~3)
+  if (a % 10 >= 1 && a % 10 <= 3) {
+    const k = a % 10, r = a - k, m = r + b;
+    pool.push(
+      { stepLines: [`${a} + ${b}`, `= ${r} + {0} + ${k}`, `= {1} + ${k}`, `= {2}`], steps: [b, m, ans] },
+      { stepLines: [`${a} + ${b}`, `= {0} + ${b} + ${k}`, `= {1} + ${k}`, `= {2}`], steps: [r, m, ans] },
+    );
+  }
+  // b를 올림 (b%10 >= 7)
+  if (b % 10 >= 7) {
+    const k = 10 - (b % 10), r = b + k, m = a + r;
+    pool.push(
+      { stepLines: [`${a} + ${b}`, `= ${a} + {0} − ${k}`, `= {1} − ${k}`, `= {2}`], steps: [r, m, ans] },
+    );
+  }
+  // b를 내림 (b%10 in 1~3)
+  if (b % 10 >= 1 && b % 10 <= 3) {
+    const k = b % 10, r = b - k, m = a + r;
+    pool.push(
+      { stepLines: [`${a} + ${b}`, `= ${a} + {0} + ${k}`, `= {1} + ${k}`, `= {2}`], steps: [r, m, ans] },
+    );
+  }
+  return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+}
+
+function makeStepSubtraction(a: number, b: number): StepPattern | null {
+  const ans = a - b;
+  const pool: StepPattern[] = [];
+  // a를 내림 (a%10 in 1~3)
+  if (a % 10 >= 1 && a % 10 <= 3) {
+    const k = a % 10, r = a - k, m = r - b;
+    pool.push(
+      { stepLines: [`${a} − ${b}`, `= ${r} − {0} + ${k}`, `= {1} + ${k}`, `= {2}`], steps: [b, m, ans] },
+      { stepLines: [`${a} − ${b}`, `= {0} − ${b} + ${k}`, `= {1} + ${k}`, `= {2}`], steps: [r, m, ans] },
+    );
+  }
+  // a를 올림 (a%10 >= 7)
+  if (a % 10 >= 7) {
+    const k = 10 - (a % 10), r = a + k, m = r - b;
+    pool.push(
+      { stepLines: [`${a} − ${b}`, `= ${r} − {0} − ${k}`, `= {1} − ${k}`, `= {2}`], steps: [b, m, ans] },
+      { stepLines: [`${a} − ${b}`, `= {0} − ${b} − ${k}`, `= {1} − ${k}`, `= {2}`], steps: [r, m, ans] },
+    );
+  }
+  // b를 올림 (b%10 >= 7, a >= r 필요)
+  if (b % 10 >= 7) {
+    const k = 10 - (b % 10), r = b + k;
+    if (a >= r) {
+      const m = a - r;
+      pool.push(
+        { stepLines: [`${a} − ${b}`, `= ${a} − {0} + ${k}`, `= {1} + ${k}`, `= {2}`], steps: [r, m, ans] },
+      );
+    }
+  }
+  // b를 내림 (b%10 in 1~3)
+  if (b % 10 >= 1 && b % 10 <= 3) {
+    const k = b % 10, r = b - k, m = a - r;
+    pool.push(
+      { stepLines: [`${a} − ${b}`, `= ${a} − {0} − ${k}`, `= {1} − ${k}`, `= {2}`], steps: [r, m, ans] },
+    );
+  }
+  return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
 }
 
 const CONFIG: Record<Mode, { title: string; op: string; make: () => Problem }> = {
@@ -22,6 +104,11 @@ const CONFIG: Record<Mode, { title: string; op: string; make: () => Problem }> =
         a = Math.floor(Math.random() * 90) + 10;
         b = Math.floor(Math.random() * 90) + 10;
       } while ((a % 10) + (b % 10) < 10);
+      // 풀이 빈칸: 40% 확률 (조건 충족 시)
+      if (Math.random() < 0.4) {
+        const step = makeStepAddition(a, b);
+        if (step) return { a, b, answer: a + b, vertical: false, ...step };
+      }
       return { a, b, answer: a + b, vertical: Math.random() < 0.5 };
     },
   },
@@ -36,6 +123,11 @@ const CONFIG: Record<Mode, { title: string; op: string; make: () => Problem }> =
         b = Math.floor(Math.random() * 90) + 10;
         if (a < b) [a, b] = [b, a];
       } while ((a % 10) >= (b % 10));
+      // 풀이 빈칸: 40% 확률 (조건 충족 시)
+      if (Math.random() < 0.4) {
+        const step = makeStepSubtraction(a, b);
+        if (step) return { a, b, answer: a - b, vertical: false, ...step };
+      }
       return { a, b, answer: a - b, vertical: Math.random() < 0.5 };
     },
   },
@@ -54,12 +146,16 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
     show: boolean;
     correct: boolean;
   }>({ show: false, correct: false });
+  const [stepIdx, setStepIdx] = useState(0);
+  const [filledSteps, setFilledSteps] = useState<number[]>([]);
 
   /* mode 변경 시 리셋 */
   useEffect(() => {
     setProblem(make());
     setScore(0);
     setInput('');
+    setStepIdx(0);
+    setFilledSteps([]);
     setResult({ show: false, correct: false });
   }, [mode]);
 
@@ -69,16 +165,27 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
   const drawingRef = useRef(false);
   const lastPosRef = useRef({ x: 0, y: 0 });
 
-  /* ── 캔버스 크기 ── */
+  /* ── 캔버스 크기 (낙서 보존) ── */
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     const cont = containerRef.current;
     if (!canvas || !cont) return;
-    canvas.width = cont.clientWidth;
-    canvas.height = cont.clientHeight;
+    const newW = cont.clientWidth;
+    const newH = cont.clientHeight;
+    if (newW <= 0 || newH <= 0) return;          // 가로모드 등 숨겨진 상태 → 무시
+    if (canvas.width === newW && canvas.height === newH) return;
+    // 기존 그림 저장
+    const tmp = document.createElement('canvas');
+    tmp.width = canvas.width;
+    tmp.height = canvas.height;
+    tmp.getContext('2d')!.drawImage(canvas, 0, 0);
+    // 리사이즈 + 복원
+    canvas.width = newW;
+    canvas.height = newH;
     const ctx = canvas.getContext('2d')!;
     ctx.fillStyle = '#f9f7f0';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, newW, newH);
+    ctx.drawImage(tmp, 0, 0);
   }, []);
 
   useEffect(() => {
@@ -167,6 +274,30 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
   const checkAnswer = useCallback(() => {
     if (!input) return;
     const num = parseInt(input, 10);
+
+    if (problem.steps) {
+      const correct = num === problem.steps[stepIdx];
+      if (correct) {
+        const next = [...filledSteps, num];
+        setFilledSteps(next);
+        setInput('');
+        if (next.length === problem.steps.length) {
+          setScore((s) => s + 1);
+          setResult({ show: true, correct: true });
+          launchConfetti(containerRef.current);
+        } else {
+          setStepIdx((s) => s + 1);
+        }
+      } else {
+        setResult({ show: true, correct: false });
+        setTimeout(() => {
+          setResult({ show: false, correct: false });
+          setInput('');
+        }, 1500);
+      }
+      return;
+    }
+
     const correct = num === problem.answer;
     if (correct) {
       setScore((s) => s + 1);
@@ -180,12 +311,14 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
         clearCanvas();
       }, 1500);
     }
-  }, [input, problem, clearCanvas]);
+  }, [input, problem, stepIdx, filledSteps, clearCanvas]);
 
   /* ── 다음 문제 ── */
   const nextProblem = useCallback(() => {
     setProblem(make());
     setInput('');
+    setStepIdx(0);
+    setFilledSteps([]);
     setResult({ show: false, correct: false });
     setTimeout(clearCanvas, 0);
   }, [clearCanvas, make]);
@@ -215,7 +348,11 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
 
         {/* 문제 */}
         <div className="problem-overlay">
-          <ProblemDisplay problem={problem} op={op} />
+          {problem.steps ? (
+            <StepDisplay problem={problem} filledSteps={filledSteps} currentStep={stepIdx} />
+          ) : (
+            <ProblemDisplay problem={problem} op={op} />
+          )}
         </div>
 
       </div>
@@ -223,7 +360,7 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
       {/* 정답 표시 */}
       <div className="answer-display">
         <div className="ans-inner">
-          <span className="ans-label">정답</span>
+          <span className="ans-label">{problem.steps ? `빈칸 ${stepIdx + 1}/${problem.steps.length}` : '정답'}</span>
           <span className="ans-value">{input || '?'}</span>
         </div>
       </div>
@@ -277,6 +414,34 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+/* ── 풀이 빈칸 표시 ── */
+function StepDisplay({ problem, filledSteps, currentStep }: {
+  problem: Problem; filledSteps: number[]; currentStep: number;
+}) {
+  if (!problem.stepLines || !problem.steps) return null;
+
+  const blank = (idx: number) => {
+    if (idx < filledSteps.length)
+      return <span className="step-filled">{filledSteps[idx]}</span>;
+    if (idx === currentStep)
+      return <span className="step-blank active">?</span>;
+    return <span className="step-blank">□</span>;
+  };
+
+  return (
+    <div className="step-display">
+      {problem.stepLines.map((line, li) => (
+        <div key={li} className={`step-line${li === 0 ? ' step-first' : ''}`}>
+          {line.split(/(\{\d+\})/).map((part, pi) => {
+            const m = part.match(/^\{(\d+)\}$/);
+            return <span key={pi}>{m ? blank(parseInt(m[1])) : part}</span>;
+          })}
+        </div>
+      ))}
     </div>
   );
 }

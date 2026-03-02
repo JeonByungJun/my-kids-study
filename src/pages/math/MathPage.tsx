@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import MenuCard from '../components/MenuCard';
+import MenuCard from '../../components/MenuCard';
 
 export default function MathPage() {
   const navigate = useNavigate();

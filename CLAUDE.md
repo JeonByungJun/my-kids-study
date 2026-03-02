@@ -34,15 +34,18 @@ ChildApp/
 │   │   └── GameShell.tsx    # 퀴즈형 게임 프레임워크
 │   └── pages/
 │       ├── HomePage.tsx     # 과목 선택 (수학/과학/영어/미술/게임)
-│       ├── MathPage.tsx     # 수학 하위 메뉴
-│       ├── CalcPage.tsx     # 연산 하위 메뉴
-│       ├── Semester21Page.tsx # 2-1학기 단원 선택
-│       ├── ArithmeticGame.tsx # 덧셈/뺄셈 공통 게임
-│       ├── GamesPage.tsx    # 게임 선택 메뉴
+│       ├── math/
+│       │   ├── MathPage.tsx         # 수학 하위 메뉴
+│       │   ├── calc/
+│       │   │   ├── CalcPage.tsx     # 연산 하위 메뉴
+│       │   │   └── ArithmeticGame.tsx # 덧셈/뺄셈 공통 게임
+│       │   └── semester21/
+│       │       ├── Semester21Page.tsx # 2-1학기 단원 선택
+│       │       ├── ThreeDigitGame.tsx # 1단원: 세자리수
+│       │       └── ShapeGame.tsx     # 2단원: 여러가지도형
 │       └── games/
-│           ├── HexaGame.tsx     # HEXA 퍼즐 게임
-│           ├── ThreeDigitGame.tsx # 1단원: 세자리수
-│           └── ShapeGame.tsx    # 2단원: 여러가지도형
+│           ├── GamesPage.tsx    # 게임 선택 메뉴
+│           └── HexaGame.tsx     # HEXA 퍼즐 게임
 ```
 
 ## 문서

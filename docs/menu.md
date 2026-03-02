@@ -47,12 +47,12 @@
 | 경로 | 파일 | 설명 |
 |------|------|------|
 | `/` | `HomePage.tsx` | 과목 선택 |
-| `/math` | `MathPage.tsx` | 수학 하위 메뉴 |
-| `/math/calc` | `CalcPage.tsx` | 연산 (덧셈/뺄셈) |
-| `/math/addition` | `ArithmeticGame.tsx` | 받아올림 덧셈 게임 |
-| `/math/subtraction` | `ArithmeticGame.tsx` | 받아내림 뺄셈 게임 |
-| `/math/semester21` | `Semester21Page.tsx` | 2-1학기 단원 선택 |
-| `/math/semester21/unit1` | `games/ThreeDigitGame.tsx` | 1단원: 세자리수 |
-| `/math/semester21/unit2` | `games/ShapeGame.tsx` | 2단원: 여러가지도형 |
-| `/games` | `GamesPage.tsx` | 게임 선택 |
+| `/math` | `math/MathPage.tsx` | 수학 하위 메뉴 |
+| `/math/calc` | `math/calc/CalcPage.tsx` | 연산 (덧셈/뺄셈) |
+| `/math/addition` | `math/calc/ArithmeticGame.tsx` | 받아올림 덧셈 게임 |
+| `/math/subtraction` | `math/calc/ArithmeticGame.tsx` | 받아내림 뺄셈 게임 |
+| `/math/semester21` | `math/semester21/Semester21Page.tsx` | 2-1학기 단원 선택 |
+| `/math/semester21/unit1` | `math/semester21/ThreeDigitGame.tsx` | 1단원: 세자리수 |
+| `/math/semester21/unit2` | `math/semester21/ShapeGame.tsx` | 2단원: 여러가지도형 |
+| `/games` | `games/GamesPage.tsx` | 게임 선택 |
 | `/games/hexa` | `games/HexaGame.tsx` | HEXA 퍼즐 게임 |

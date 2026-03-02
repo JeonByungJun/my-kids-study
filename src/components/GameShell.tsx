@@ -7,6 +7,9 @@ export interface Problem {
   answer: number;
   /** 선택지 모드: 제공 시 숫자패드 대신 선택 버튼 표시. answer = 정답의 0-based 인덱스 */
   choices?: string[];
+  /** 다중선택 모드: 여러 개 골라 확인. multiAnswer = 정답 인덱스 배열 */
+  multiChoices?: string[];
+  multiAnswer?: number[];
 }
 
 interface GameShellProps {
@@ -22,6 +25,7 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
   const [problem, setProblem] = useState<Problem>(() => generate());
   const [score, setScore] = useState(0);
   const [input, setInput] = useState('');
+  const [selected, setSelected] = useState<Set<number>>(new Set());
   const [result, setResult] = useState<{ show: boolean; correct: boolean }>({
     show: false,
     correct: false,
@@ -36,11 +40,22 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
     const canvas = canvasRef.current;
     const cont = containerRef.current;
     if (!canvas || !cont) return;
-    canvas.width = cont.clientWidth;
-    canvas.height = cont.clientHeight;
+    const newW = cont.clientWidth;
+    const newH = cont.clientHeight;
+    if (newW <= 0 || newH <= 0) return;          // 가로모드 등 숨겨진 상태 → 무시
+    if (canvas.width === newW && canvas.height === newH) return;
+    // 기존 그림 저장
+    const tmp = document.createElement('canvas');
+    tmp.width = canvas.width;
+    tmp.height = canvas.height;
+    tmp.getContext('2d')!.drawImage(canvas, 0, 0);
+    // 리사이즈 + 복원
+    canvas.width = newW;
+    canvas.height = newH;
     const ctx = canvas.getContext('2d')!;
     ctx.fillStyle = '#f9f7f0';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, newW, newH);
+    ctx.drawImage(tmp, 0, 0);
   }, []);
 
   useEffect(() => {
@@ -144,6 +159,36 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
     }
   }, [input, problem, clearCanvas]);
 
+  /* 다중선택 토글 */
+  const onMultiToggle = useCallback((idx: number) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx);
+      else next.add(idx);
+      return next;
+    });
+  }, []);
+
+  /* 다중선택 확인 */
+  const checkMultiAnswer = useCallback(() => {
+    if (selected.size === 0) return;
+    const sorted = [...selected].sort((a, b) => a - b);
+    const ans = [...(problem.multiAnswer ?? [])].sort((a, b) => a - b);
+    const correct = sorted.length === ans.length && sorted.every((v, i) => v === ans[i]);
+    if (correct) {
+      setScore(s => s + 1);
+      setResult({ show: true, correct: true });
+      launchConfetti(containerRef.current);
+    } else {
+      setResult({ show: true, correct: false });
+      setTimeout(() => {
+        setResult({ show: false, correct: false });
+        setSelected(new Set());
+        clearCanvas();
+      }, 1500);
+    }
+  }, [selected, problem, clearCanvas]);
+
   /* 선택지 클릭 */
   const onChoice = useCallback(
     (idx: number) => {
@@ -168,6 +213,7 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
   const nextProblem = useCallback(() => {
     setProblem(generate());
     setInput('');
+    setSelected(new Set());
     setResult({ show: false, correct: false });
     setTimeout(clearCanvas, 0);
   }, [clearCanvas, generate]);
@@ -194,8 +240,25 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
         <div className="problem-overlay">{problem.display}</div>
       </div>
 
-      {/* 선택지 모드 vs 숫자패드 모드 */}
-      {problem.choices ? (
+      {/* 다중선택 vs 선택지 vs 숫자패드 */}
+      {problem.multiChoices ? (
+        <div className="input-area">
+          <div className="multi-choice-area">
+            {problem.multiChoices.map((text, i) => (
+              <button
+                key={i}
+                className={`multi-choice-btn ${selected.has(i) ? 'selected' : ''}`}
+                onClick={() => onMultiToggle(i)}
+              >
+                {text}
+              </button>
+            ))}
+          </div>
+          <button className="multi-submit-btn" onClick={checkMultiAnswer}>
+            확인 ✓
+          </button>
+        </div>
+      ) : problem.choices ? (
         <div className="input-area">
           <div className="choice-area">
             {problem.choices.map((text, i) => (
@@ -253,9 +316,15 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
             <div className="result-text">{result.correct ? '정답이에요!' : '다시 해봐요!'}</div>
             <div className="result-sub">
               {result.correct
-                ? `정답: ${problem.choices ? problem.choices[problem.answer] : problem.answer}`
-                : problem.choices
-                  ? `${input}은(는) 아니에요!`
+                ? `정답: ${
+                    problem.multiChoices && problem.multiAnswer
+                      ? problem.multiAnswer.map(i => problem.multiChoices![i]).join(', ')
+                      : problem.choices
+                        ? problem.choices[problem.answer]
+                        : problem.answer
+                  }`
+                : problem.multiChoices
+                  ? '다시 골라봐요!'
                   : `${input}은(는) 아니에요!`}
             </div>
           </div>

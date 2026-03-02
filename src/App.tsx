@@ -1,13 +1,13 @@
 import { Routes, Route } from 'react-router-dom';
 import Stars from './components/Stars';
 import HomePage from './pages/HomePage';
-import MathPage from './pages/MathPage';
-import CalcPage from './pages/CalcPage';
-import Semester21Page from './pages/Semester21Page';
-import ArithmeticGame from './pages/ArithmeticGame';
-import ThreeDigitGame from './pages/games/ThreeDigitGame';
-import ShapeGame from './pages/games/ShapeGame';
-import GamesPage from './pages/GamesPage';
+import MathPage from './pages/math/MathPage';
+import CalcPage from './pages/math/calc/CalcPage';
+import Semester21Page from './pages/math/semester21/Semester21Page';
+import ArithmeticGame from './pages/math/calc/ArithmeticGame';
+import ThreeDigitGame from './pages/math/semester21/ThreeDigitGame';
+import ShapeGame from './pages/math/semester21/ShapeGame';
+import GamesPage from './pages/games/GamesPage';
 import HexaGame from './pages/games/HexaGame';
 
 export default function App() {
