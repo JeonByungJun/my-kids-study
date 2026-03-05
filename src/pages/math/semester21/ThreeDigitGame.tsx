@@ -47,15 +47,18 @@ const generators: (() => Problem)[] = [
     };
   },
 
-  /* ③ 수 구성 — "100이 5, 10이 3, 1이 8인 수" */
+  /* ③ 수 구성 — "100이 5, 10이 3, 1이 8인 수" (0인 자리 생략) */
   () => {
     const h = rand(1, 9);
     const t = rand(0, 9);
     const o = rand(0, 9);
+    const parts: string[] = [`100이 ${h}`];
+    if (t) parts.push(`10이 ${t}`);
+    if (o) parts.push(`1이 ${o}`);
     return {
       display: (
         <div className="quiz-text">
-          100이 {h}, 10이 {t}, 1이 {o}인
+          {parts.join(', ')}인
           <br />수는?
         </div>
       ),
@@ -157,21 +160,6 @@ const generators: (() => Problem)[] = [
     };
   },
 
-  /* ⑧ 확장 수 구성 — "100이 1, 10이 16, 1이 24인 수" */
-  () => {
-    const h = rand(1, 5);
-    const t = rand(10, 20);
-    const o = rand(10, 30);
-    return {
-      display: (
-        <div className="quiz-text">
-          100이 {h}, 10이 {t}, 1이 {o}인
-          <br />수는?
-        </div>
-      ),
-      answer: h * 100 + t * 10 + o,
-    };
-  },
 ];
 
 function generate(): Problem {
