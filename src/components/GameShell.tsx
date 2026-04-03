@@ -10,6 +10,8 @@ export interface Problem {
   /** 다중선택 모드: 여러 개 골라 확인. multiAnswer = 정답 인덱스 배열 */
   multiChoices?: string[];
   multiAnswer?: number[];
+  /** 오답 시 표시할 힌트 메시지 */
+  hint?: string;
 }
 
 interface GameShellProps {
@@ -151,11 +153,12 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
       launchConfetti(containerRef.current);
     } else {
       setResult({ show: true, correct: false });
+      const delay = problem.hint ? 2500 : 1500;
       setTimeout(() => {
         setResult({ show: false, correct: false });
         setInput('');
         clearCanvas();
-      }, 1500);
+      }, delay);
     }
   }, [input, problem, clearCanvas]);
 
@@ -181,11 +184,12 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
       launchConfetti(containerRef.current);
     } else {
       setResult({ show: true, correct: false });
+      const delay = problem.hint ? 2500 : 1500;
       setTimeout(() => {
         setResult({ show: false, correct: false });
         setSelected(new Set());
         clearCanvas();
-      }, 1500);
+      }, delay);
     }
   }, [selected, problem, clearCanvas]);
 
@@ -200,11 +204,12 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
         launchConfetti(containerRef.current);
       } else {
         setResult({ show: true, correct: false });
+        const delay = problem.hint ? 2500 : 1500;
         setTimeout(() => {
           setResult({ show: false, correct: false });
           setInput('');
           clearCanvas();
-        }, 1500);
+        }, delay);
       }
     },
     [problem, clearCanvas],
@@ -327,6 +332,12 @@ export default function GameShell({ title, backTo, generate, maxDigits = 3 }: Ga
                   ? '다시 골라봐요!'
                   : `${input}은(는) 아니에요!`}
             </div>
+            {!result.correct && problem.hint && (
+              <div className="hint-box">
+                <span className="hint-icon">💡</span>
+                <p className="hint-text">{problem.hint}</p>
+              </div>
+            )}
           </div>
           {result.correct && (
             <button className="result-next-btn" onClick={nextProblem}>

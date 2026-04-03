@@ -11,6 +11,7 @@ export default function MathPage() {
       <div className="menu-grid">
         <MenuCard icon="➕" label="연산" theme="calc" to="/math/calc" />
         <MenuCard icon="📖" label="2-1학기" theme="semester" to="/math/semester21" />
+        <MenuCard icon="📗" label="2-2학기" theme="semester2" to="/math/semester22" />
         <MenuCard icon="📐" label="도형" comingSoon />
         <MenuCard icon="📊" label="통계" comingSoon />
       </div>

@@ -25,6 +25,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: digit,
+      hint: '세 자리 수에서 왼쪽부터 백 → 십 → 일의 자리예요! 예) 385 → 백=3, 십=8, 일=5',
     };
   },
 
@@ -44,6 +45,9 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: start + step * count,
+      hint: step === 100
+        ? '100씩 뛰어세면 백의 자리가 1씩 커져요!'
+        : '10씩 뛰어세면 십의 자리가 1씩 커져요!',
     };
   },
 
@@ -63,6 +67,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: h * 100 + t * 10 + o,
+      hint: '100이 a개 → a×100, 10이 b개 → b×10, 1이 c개 → c, 이것들을 모두 더해요!',
     };
   },
 
@@ -83,6 +88,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: isBig ? Math.max(a, b) : Math.min(a, b),
+      hint: '백의 자리부터 비교해요! 백이 같으면 십, 그 다음 일의 자리 순서로 비교해요.',
     };
   },
 
@@ -91,6 +97,7 @@ const generators: (() => Problem)[] = [
     const delta = pick([1, 10, 100]);
     const isAdd = Math.random() < 0.5;
     const n = isAdd ? rand(100, 999 - delta) : rand(100 + delta, 999);
+    const placeLabel = delta === 1 ? '일의 자리' : delta === 10 ? '십의 자리' : '백의 자리';
     return {
       display: (
         <div className="quiz-text">
@@ -100,6 +107,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: isAdd ? n + delta : n - delta,
+      hint: `${placeLabel}에 1을 ${isAdd ? '더하면' : '빼면'} 돼요!`,
     };
   },
 
@@ -139,6 +147,9 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer,
+      hint: isBig
+        ? '가장 큰 수를 만들려면 큰 숫자를 앞자리(백의 자리)부터 놓아요!'
+        : '가장 작은 수를 만들려면 작은 숫자를 앞자리에 놓아요. 단, 0은 백의 자리에 올 수 없어요!',
     };
   },
 
@@ -157,6 +168,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: start + step * times,
+      hint: `시작 수에서 ${step}씩 ${times}번 더해요! ${start} + (${step} × ${times})를 계산해봐요.`,
     };
   },
 

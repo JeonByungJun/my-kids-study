@@ -243,6 +243,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: s.sides,
+      hint: '원=0, 삼각형=3, 사각형=4, 오각형=5, 육각형=6개! 변은 도형의 곧은 선이에요.',
     };
   },
 
@@ -258,6 +259,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: s.vertices,
+      hint: '꼭짓점은 변과 변이 만나는 뾰족한 점이에요! 원=0, 삼각형=3, 사각형=4, 오각형=5, 육각형=6',
     };
   },
 
@@ -286,6 +288,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer,
+      hint: `${target.name}만 손가락으로 짚어가며 하나씩 세어봐요!`,
     };
   },
 
@@ -309,6 +312,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: targetIdx + 1,
+      hint: `1번부터 차례로 어느 도형인지 살펴봐요. ${targetName}을 찾으면 그 번호를 눌러요!`,
     };
   },
 
@@ -325,6 +329,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: s.sides,
+      hint: '삼각형=3, 사각형=4, 오각형=5, 육각형=6! 변은 도형 가장자리의 곧은 선이에요.',
     };
   },
 
@@ -344,6 +349,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: a.sides + b.sides,
+      hint: `각 도형의 변 수를 따로 세고 더해봐요! (${a.name}의 변 + ${b.name}의 변)`,
     };
   },
 
@@ -360,6 +366,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: s.sides + s.vertices,
+      hint: `다각형은 변의 수와 꼭짓점의 수가 같아요! ${s.name}의 변 수를 떠올리고 2배 해봐요.`,
     };
   },
 
@@ -383,6 +390,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: valBig - valSmall,
+      hint: `삼각형=3, 사각형=4, 오각형=5, 육각형=6! 각 도형의 ${prop} 수를 빼봐요.`,
     };
   },
 
@@ -400,6 +408,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer,
+      hint: '각 도형의 수를 먼저 구하고, 차례로 계산해봐요! 삼=3, 사=4, 오=5, 육=6',
     };
   },
 
@@ -419,6 +428,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: target.sides,
+      hint: `변이 ${lower}개 초과이고 꼭짓점이 ${upper}개 미만인 도형을 찾아봐요! 삼=3, 사=4, 오=5, 육=6`,
     };
   },
 
@@ -440,6 +450,7 @@ const generators: (() => Problem)[] = [
       ),
       answer: choices.indexOf(target.name),
       choices,
+      hint: '둥글면 원, 뾰족한 꼭짓점이 3개면 삼각형, 4개면 사각형, 5개면 오각형, 6개면 육각형!',
     };
   },
 
@@ -460,6 +471,7 @@ const generators: (() => Problem)[] = [
       ),
       answer: choices.indexOf(target.name),
       choices,
+      hint: `변(=꼭짓점) 수로 이름이 결정돼요! 3=삼각형, 4=사각형, 5=오각형, 6=육각형`,
     };
   },
 
@@ -482,6 +494,7 @@ const generators: (() => Problem)[] = [
       ),
       answer: choices.indexOf(target.name),
       choices,
+      hint: `조건을 하나씩 확인해봐요! 변이 ${lower}개 초과, 꼭짓점이 ${upper}개 미만인 도형을 선택지에서 찾아요.`,
     };
   },
 
@@ -499,6 +512,7 @@ const generators: (() => Problem)[] = [
       ),
       answer: choices.indexOf('원'),
       choices,
+      hint: '둥글고 뾰족한 부분이 전혀 없는 도형을 생각해봐요! 변도 꼭짓점도 없어요.',
     };
   },
 
@@ -547,6 +561,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer,
+      hint: `${blankShape.name}의 ${blankRow === 0 ? '변' : '꼭짓점'} 수를 떠올려봐요! 삼=3, 사=4, 오=5, 육=6`,
     };
   },
 
@@ -593,6 +608,9 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer,
+      hint: blankShape.name === '원'
+        ? '원은 변과 꼭짓점이 없어요! 0을 입력해봐요.'
+        : `${blankShape.name}의 ${blankRow === 0 ? '변' : '꼭짓점'} 수는 이름에서 힌트를 얻어요! 삼=3, 사=4, 오=5, 육=6`,
     };
   },
 
@@ -635,6 +653,7 @@ const generators: (() => Problem)[] = [
       answer: -1,
       multiChoices: labels.slice(0, count),
       multiAnswer: correctIndices,
+      hint: `${target.name}에 해당하는 도형을 하나씩 확인하며 모두 선택해요!`,
     };
   },
 
@@ -655,6 +674,7 @@ const generators: (() => Problem)[] = [
       .filter(i => i >= 0);
 
     const labels = ['가', '나', '다', '라'];
+    const isCircle = shape.sides === 0;
     return {
       display: (
         <div className="quiz-text">
@@ -666,6 +686,9 @@ const generators: (() => Problem)[] = [
       answer: -1,
       multiChoices: ordered.map((s, i) => `${labels[i]}. ${s}`),
       multiAnswer: correctIndices,
+      hint: isCircle
+        ? '원은 둥글고 변·꼭짓점이 없어요! 설명을 하나씩 읽으며 원에 해당하는 것을 골라요.'
+        : `${shape.name}의 변과 꼭짓점 수는 같아요(${shape.sides}개)! 옳은 설명만 골라요.`,
     };
   },
 
@@ -710,6 +733,7 @@ const generators: (() => Problem)[] = [
       answer: -1,
       multiChoices: labels,
       multiAnswer: correctIndices,
+      hint: `변이 ${targetSides}개인 도형만 골라요! 각 도형의 변 수: 원=0, 삼각형=3, 사각형=4, 오각형=5, 육각형=6`,
     };
   },
 
@@ -753,6 +777,7 @@ const generators: (() => Problem)[] = [
       answer: -1,
       multiChoices: stmts.map((s, i) => `${labels[i]}. ${s.text}`),
       multiAnswer: correctIndices,
+      hint: `두 도형 모두 다각형이에요! 다각형은 변과 꼭짓점이 있고, 곧은 선으로 둘러싸여 있어요.`,
     };
   },
 
@@ -771,6 +796,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: blocks.length,
+      hint: '앞에서 보이지 않는 숨은 나무도 있을 수 있어요! 층별로 나누어 꼼꼼히 세어봐요.',
     };
   },
 
@@ -793,6 +819,7 @@ const generators: (() => Problem)[] = [
         </div>
       ),
       answer: count,
+      hint: `1층은 바닥, 2층은 그 위예요! ${targetLayer + 1}층에 있는 나무만 따로 세어봐요.`,
     };
   },
 

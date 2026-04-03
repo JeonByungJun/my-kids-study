@@ -12,6 +12,8 @@ interface Problem {
   /* 풀이 빈칸 채우기 */
   steps?: number[];
   stepLines?: string[];
+  /** 오답 시 표시할 힌트 메시지 */
+  hint?: string;
 }
 
 /* ── 풀이 빈칸 패턴 생성 ── */
@@ -107,9 +109,18 @@ const CONFIG: Record<Mode, { title: string; op: string; make: () => Problem }> =
       // 풀이 빈칸: 40% 확률 (조건 충족 시)
       if (Math.random() < 0.4) {
         const step = makeStepAddition(a, b);
-        if (step) return { a, b, answer: a + b, vertical: false, ...step };
+        if (step) return {
+          a, b, answer: a + b, vertical: false, ...step,
+          hint: '앞의 식 패턴을 따라 빈칸에 알맞은 수를 찾아봐요! 한 단계씩 천천히 계산해요.',
+        };
       }
-      return { a, b, answer: a + b, vertical: Math.random() < 0.5 };
+      const vertical = Math.random() < 0.5;
+      return {
+        a, b, answer: a + b, vertical,
+        hint: vertical
+          ? '일의 자리끼리 더해서 10 이상이면, 10은 십의 자리로 올려요! (받아올림)'
+          : '일의 자리를 먼저 더해봐요. 10이 넘으면 받아올림을 해요!',
+      };
     },
   },
   subtraction: {
@@ -126,9 +137,18 @@ const CONFIG: Record<Mode, { title: string; op: string; make: () => Problem }> =
       // 풀이 빈칸: 40% 확률 (조건 충족 시)
       if (Math.random() < 0.4) {
         const step = makeStepSubtraction(a, b);
-        if (step) return { a, b, answer: a - b, vertical: false, ...step };
+        if (step) return {
+          a, b, answer: a - b, vertical: false, ...step,
+          hint: '앞의 식 패턴을 따라 빈칸에 알맞은 수를 찾아봐요! 한 단계씩 천천히 계산해요.',
+        };
       }
-      return { a, b, answer: a - b, vertical: Math.random() < 0.5 };
+      const vertical = Math.random() < 0.5;
+      return {
+        a, b, answer: a - b, vertical,
+        hint: vertical
+          ? '일의 자리에서 뺄 수 없으면, 십의 자리에서 10을 빌려와요! (받아내림)'
+          : '일의 자리끼리 빼기 어려우면 십의 자리에서 10을 빌려와요!',
+      };
     },
   },
 };
@@ -290,10 +310,11 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
         }
       } else {
         setResult({ show: true, correct: false });
+        const delay = problem.hint ? 2500 : 1500;
         setTimeout(() => {
           setResult({ show: false, correct: false });
           setInput('');
-        }, 1500);
+        }, delay);
       }
       return;
     }
@@ -305,11 +326,12 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
       launchConfetti(containerRef.current);
     } else {
       setResult({ show: true, correct: false });
+      const delay = problem.hint ? 2500 : 1500;
       setTimeout(() => {
         setResult({ show: false, correct: false });
         setInput('');
         clearCanvas();
-      }, 1500);
+      }, delay);
     }
   }, [input, problem, stepIdx, filledSteps, clearCanvas]);
 
@@ -406,6 +428,12 @@ export default function ArithmeticGame({ mode }: { mode: Mode }) {
                 ? `${problem.a} ${op} ${problem.b} = ${problem.answer}`
                 : `${input}은(는) 아니에요!`}
             </div>
+            {!result.correct && problem.hint && (
+              <div className="hint-box">
+                <span className="hint-icon">💡</span>
+                <p className="hint-text">{problem.hint}</p>
+              </div>
+            )}
           </div>
           {result.correct && (
             <button className="result-next-btn" onClick={nextProblem}>

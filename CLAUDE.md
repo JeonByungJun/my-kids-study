@@ -12,45 +12,13 @@
 - **배포**: Vercel (GitHub 연동 자동 배포)
 
 ## 프로젝트 구조
-```
-ChildApp/
-├── index.html
-├── package.json
-├── vite.config.ts
-├── vercel.json              # SPA 라우팅 rewrite
-├── CLAUDE.md                # 이 파일 (프로젝트 설명)
-├── docs/
-│   ├── menu.md              # 메뉴 구조 + 라우팅 + 파일 매핑
-│   └── hexa-game.md         # HEXA 게임 설계서
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── main.tsx             # 진입점 (BrowserRouter)
-│   ├── App.tsx              # 라우트 정의
-│   ├── global.css           # 전역 스타일
-│   ├── components/
-│   │   ├── Stars.tsx        # 배경 별 애니메이션
-│   │   ├── MenuCard.tsx     # 재사용 메뉴 카드
-│   │   └── GameShell.tsx    # 퀴즈형 게임 프레임워크
-│   └── pages/
-│       ├── HomePage.tsx     # 과목 선택 (수학/과학/영어/미술/게임)
-│       ├── math/
-│       │   ├── MathPage.tsx         # 수학 하위 메뉴
-│       │   ├── calc/
-│       │   │   ├── CalcPage.tsx     # 연산 하위 메뉴
-│       │   │   └── ArithmeticGame.tsx # 덧셈/뺄셈 공통 게임
-│       │   └── semester21/
-│       │       ├── Semester21Page.tsx # 2-1학기 단원 선택
-│       │       ├── ThreeDigitGame.tsx # 1단원: 세자리수
-│       │       └── ShapeGame.tsx     # 2단원: 여러가지도형
-│       └── games/
-│           ├── GamesPage.tsx    # 게임 선택 메뉴
-│           └── HexaGame.tsx     # HEXA 퍼즐 게임
-```
+구조 상세는 `AGENTS.md` 참조.
 
 ## 문서
 - `docs/menu.md` — 전체 메뉴 구조, 라우팅, 파일 매핑 (메뉴 추가/변경 시 참조)
 - `docs/hexa-game.md` — HEXA 게임 설계서 (Phase, 함수, 점수, 할 일 등)
+- `docs/math-2nd-grade-full-spec.md` — 2학년 수학 전 단원(1·2학기) 게임 설계서
+- `docs/math-2nd-grade-review.md` — 2학년 수학 문제 유형 리뷰 및 개선 제안
 
 ## 디자인 시스템
 - 배경: 파스텔 그라데이션 + 떠다니는 별
@@ -67,8 +35,18 @@ npm run build   # 프로덕션 빌드
 ```
 
 ## 앞으로 할 일
+- [x] 곱셈 게임 추가 (6단원 곱셈 입문 + 2-2 곱셈구구)
+- [x] 오답 시 힌트 기능 (GameShell hint 프로퍼티)
+- [x] 2-1학기 전 단원 게임 (세자리수/도형/덧셈뺄셈/길이재기/분류하기/곱셈)
+- [x] 2-2학기 전 단원 게임 (곱셈구구/길이/시각시간/표그래프/규칙찾기/분수)
 - [ ] HEXA: 하드드롭, 효과음, 최고점수 저장
-- [ ] 곱셈/나눗셈 게임 추가
 - [ ] 게임: 카드 짝맞추기, 두더지잡기, 퍼즐
-- [ ] 오답 시 힌트 기능
+- [ ] 2-2학기 1단원: 네자리수 게임 구현
+- [ ] 나눗셈 게임 추가
 - [ ] 다른 과목 콘텐츠 (과학/영어/미술)
+
+### 기술 부채 (우선 처리)
+- [ ] `useCanvasDrawing` 훅 추출 — GameShell·ArithmeticGame에 중복된 캔버스 그리기 로직 통합
+- [ ] `launchConfetti()` 공용 유틸 분리 — 두 파일에 동일하게 존재하는 함수를 `src/utils/`로 이동
+- [ ] `NumberPad` 공용 컴포넌트 추출 — 두 파일에 중복된 숫자패드 JSX를 독립 컴포넌트로 분리
+- [ ] HexaGame `'spawning' as GamePhase` 타입 핵 수정 — `GamePhase` 타입에 `'spawning'` 추가 또는 로컬 상태 분리
